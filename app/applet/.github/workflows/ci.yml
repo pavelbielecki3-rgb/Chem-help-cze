@@ -1,0 +1,27 @@
+name: Node 24 CI Workflow
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  # Tímto přinutíme GitHub Actions používat Node.js 24 a vyhneme se zastaralé dvacítce!
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout kód
+        # actions/checkout@v4 je nejnovější hlavní verze, s proměnnou výše poběží na Node 24
+        uses: actions/checkout@v4
+
+      - name: DataDog Synthetics CI
+        # Doporučuji přejít na nejnovější stabilní verzi (např. @v0.24.0 nebo novější) místo starého hashe
+        uses: DataDog/synthetics-ci-github-action@master
+        with:
+          api_key: ${{ secrets.DD_API_KEY }}
+          app_key: ${{ secrets.DD_APP_KEY }}
